@@ -1,22 +1,20 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private float _speed = 5.0f;
-    Vector3 pos;
+    [SerializeField]
+    private float _jumpPower = 3.0f;
 
-    [SerializeField]
-    private float _jumpPower = 3f;
-    [SerializeField]
-    private float _gravity = -9.81f;
+    [SerializeField, Tooltip("必ず正の値を入れる")]
+    private float _gravity = 30.0f;
+
+    private float _speed = 5.0f;
+    private float _jumpElapsedTime = 0.0f;
+    private float _offsetY;           // 初期の高さ
+    private bool _isGround = true;    // 接地判定用
+    private Vector3 pos;
 
     //private int _JumpCount = 2;
-
-    private float _offsetY;
-
-    // 接地判定用
-    private bool _isGround = true;
 
     private void Start()
     {
@@ -30,28 +28,29 @@ public class PlayerController : MonoBehaviour
         PlayerJump();
     }
 
-    void PlayerMove()
+    private void PlayerMove()
     {
         var horizontal = Input.GetAxisRaw("Horizontal");
         transform.position += new Vector3(horizontal * Time.deltaTime * _speed, 0, 0);
     }
 
-    void PlayerJump()
+    private void PlayerJump()
     {
         if (Input.GetButtonDown("Jump") && _isGround)
         {
-            pos.y = Mathf.Sqrt(_jumpPower * -2f * _gravity); // ジャンプの初速度を計算
             _isGround = false;
         }
         if (!_isGround)
         {
-            pos.y += _gravity * Time.deltaTime; // 重力を加算
-            transform.position += new Vector3(0, pos.y * Time.deltaTime, 0); // 垂直方向の位置を更新
+            _jumpElapsedTime += Time.deltaTime;
+            pos.y = _jumpPower * _jumpElapsedTime - (_gravity * _jumpElapsedTime * _jumpElapsedTime * 0.5f) + _offsetY;
             if (transform.position.y < _offsetY)
             {
+                pos.y = _offsetY;
                 _isGround = true;
+                _jumpElapsedTime = 0;
             }
+            transform.position = new Vector3(this.transform.position.x, pos.y, this.transform.position.z);
         }
     }
 }
-
