@@ -21,21 +21,20 @@ public class Enemy : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    /*void Start()
     {
         // BulletGeneratorがStartにこの処理を書いているため
         // 撃つときにステートを変更する必要がある(逆も然り)
         // メモ：Bulletの方でステートに合わせてオブジェクト自体を変えたほうがいいかも
-        /*var bullet = _bulletPrefab.GetComponent<Bullet>();
+        var bullet = _bulletPrefab.GetComponent<Bullet>();
         bullet.Type = BulletType.Enemy;
-        bullet.Speed = _bulletSpeed;*/
-
-        _vDistance = _player.transform.localPosition - this.transform.position;
-        _distance = _vDistance.x * _vDistance.x + _vDistance.y * _vDistance.y;   
-    }
+        bullet.Speed = _bulletSpeed;
+    }*/
 
     private void Update()
     {
+        _vDistance = _player.transform.localPosition - this.transform.position;
+        _distance = _vDistance.x * _vDistance.x + _vDistance.y * _vDistance.y;   
         // Playerの中心が円の中に入っていれば
         if (_distance <= _radius * _radius)
         {
