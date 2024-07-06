@@ -136,7 +136,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4321828746637418899, guid: 2bdcf4c95d1b67944a8d85a76f230570, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.28
+      value: 5.42
       objectReference: {fileID: 0}
     - target: {fileID: 4321828746637418899, guid: 2bdcf4c95d1b67944a8d85a76f230570, type: 3}
       propertyPath: m_LocalPosition.y
@@ -202,7 +202,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4321828746637418899, guid: 2bdcf4c95d1b67944a8d85a76f230570, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.86
+      value: 3.68
       objectReference: {fileID: 0}
     - target: {fileID: 4321828746637418899, guid: 2bdcf4c95d1b67944a8d85a76f230570, type: 3}
       propertyPath: m_LocalPosition.y
@@ -268,7 +268,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4321828746637418899, guid: 2bdcf4c95d1b67944a8d85a76f230570, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.02
+      value: 1.45
       objectReference: {fileID: 0}
     - target: {fileID: 4321828746637418899, guid: 2bdcf4c95d1b67944a8d85a76f230570, type: 3}
       propertyPath: m_LocalPosition.y
@@ -421,7 +421,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4321828746637418899, guid: 2bdcf4c95d1b67944a8d85a76f230570, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.93
+      value: 7.75
       objectReference: {fileID: 0}
     - target: {fileID: 4321828746637418899, guid: 2bdcf4c95d1b67944a8d85a76f230570, type: 3}
       propertyPath: m_LocalPosition.y
@@ -704,6 +704,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _jumpPower: 15
   _gravity: 35
+  _hp: 5
 --- !u!58 &898632728
 CircleCollider2D:
   m_ObjectHideFlags: 0

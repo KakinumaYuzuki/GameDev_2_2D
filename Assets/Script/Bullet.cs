@@ -22,6 +22,8 @@ public class Bullet : MonoBehaviour
 
     public float Speed { get => _speed; set => _speed = value; }
 
+    PlayerController _player;
+
     public BulletType Type
     {
         get => _type;
@@ -40,12 +42,29 @@ public class Bullet : MonoBehaviour
     private void Start()
     {
         _pos = transform.position;
+        _player = GameObject.FindObjectOfType<PlayerController>();
     }
 
     private void Update()
     {
         _pos.x += _speed * Time.deltaTime;
         transform.position = _pos;
+
+        // 敵の弾がプレイヤーに当たっているか
+        // 矩形同士の判定
+        if (_type == BulletType.Enemy)
+        {
+            var playerLeftUpperPos = _player.transform.position - _player.transform.localScale / 2;
+            var playerRightBottomPos = _player.transform.position + _player.transform.localScale / 2;
+            var bulletLeftUpperPos = this.transform.position - this.transform.localScale / 2;
+            var bulletBottomPos = this.transform.position + this.transform.localScale / 2;
+            if (playerLeftUpperPos.x <= bulletBottomPos.x && bulletLeftUpperPos.x <= playerRightBottomPos.x
+                    && playerLeftUpperPos.y <= bulletBottomPos.y && bulletLeftUpperPos.y <= playerRightBottomPos.y)
+            {
+                _player.Damage();
+                Destroy(this.gameObject);
+            }
+        }
     }
 
     private void OnTypeChanged()

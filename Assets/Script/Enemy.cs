@@ -42,7 +42,6 @@ public class Enemy : MonoBehaviour
             ShootBullet();
             //Debug.Log($"{this.name}”ÍˆÍ“à");
         }
-        
     }
 
     /// <summary>
