@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : Life
 {
     [SerializeField]
     GameObject _player;
@@ -19,17 +19,18 @@ public class Enemy : MonoBehaviour
     private float _timer = 0.0f;
     private float _interval = 1.0f;
 
-
-    // Start is called before the first frame update
-    /*void Start()
+    void Start()
     {
+        // ゲームマネージャの敵リストに登録
+        GameManager.Instance.Register(this);
+
         // BulletGeneratorがStartにこの処理を書いているため
         // 撃つときにステートを変更する必要がある(逆も然り)
         // メモ：Bulletの方でステートに合わせてオブジェクト自体を変えたほうがいいかも
-        var bullet = _bulletPrefab.GetComponent<Bullet>();
+        /*var bullet = _bulletPrefab.GetComponent<Bullet>();
         bullet.Type = BulletType.Enemy;
-        bullet.Speed = _bulletSpeed;
-    }*/
+        bullet.Speed = _bulletSpeed;*/
+    }
 
     private void Update()
     {
@@ -41,6 +42,13 @@ public class Enemy : MonoBehaviour
             _timer += Time.deltaTime;
             ShootBullet();
             //Debug.Log($"{this.name}範囲内");
+        }
+
+        if (Hp <= 0)
+        {
+            GameManager.Instance.Unregister(this);
+            Destroy(this.gameObject);
+            return;
         }
     }
 

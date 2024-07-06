@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Life
 {
     [SerializeField]
     private float _jumpPower = 3.0f;
@@ -14,13 +14,12 @@ public class PlayerController : MonoBehaviour
     private bool _isGround = true;    // 接地判定用
     private Vector3 pos;
 
-    [SerializeField]
-    private int _hp = 5;
-
     //private int _JumpCount = 2;
 
     private void Start()
     {
+        // ゲームマネージャにプレイヤーを登録
+        GameManager.Instance.Register(this);
         pos = transform.position;
         _offsetY = pos.y;
     }
@@ -29,6 +28,11 @@ public class PlayerController : MonoBehaviour
     {
         PlayerMove();
         PlayerJump();
+
+        if (Hp <= 0)
+        {
+            //Debug.Log("GameOver");
+        }
     }
 
     private void PlayerMove()
@@ -54,16 +58,6 @@ public class PlayerController : MonoBehaviour
                 _jumpElapsedTime = 0;
             }
             transform.position = new Vector3(this.transform.position.x, pos.y, this.transform.position.z);
-        }
-    }
-
-    public void Damage()
-    {
-        _hp--;
-        if (_hp <= 0)
-        {
-            _hp = 0;
-            Debug.Log("ライフ0");
         }
     }
 }
