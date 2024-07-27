@@ -17,10 +17,10 @@ public class Bullet : MonoBehaviour
     [SerializeField]
     private Color _enemyBulletColor;
 
-    private Vector2 _pos;
-    private float _speed = 5.0f;
+    private Vector3 _pos;
+    private Vector3 _speed = new Vector3(5, 0, 0);
 
-    public float Speed { get => _speed; set => _speed = value; }
+    public Vector3 Speed { get => _speed; set => _speed = value; }
 
     public BulletType Type
     {
@@ -44,7 +44,7 @@ public class Bullet : MonoBehaviour
 
     private void Update()
     {
-        _pos.x += _speed * Time.deltaTime;
+        _pos += _speed * Time.deltaTime;
         transform.position = _pos;
 
         // ‹…‚Ìí—Ş‚É‚æ‚Á‚Ä“–‚½‚é‘ÎÛ‚ğ•Ï‚¦‚é
@@ -107,5 +107,14 @@ public class Bullet : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    /// <summary>
+    /// ’e‚Ì”ò‚Ô•ûŒü‚ğŒˆ‚ß‚é
+    /// </summary>
+    /// <param name="vec"></param>
+    public void SetDirection(Vector3 vec)
+    {
+        _speed = vec * _speed.magnitude;
     }
 }

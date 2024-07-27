@@ -8,11 +8,11 @@ public class Enemy : Life
     [SerializeField]
     GameObject _bulletPrefab;
 
-    [SerializeField, Tooltip("“–‚½‚è”»’è‚Ì”ÍˆÍ(‹——£)")]
+    [SerializeField, Tooltip("å½“ãŸã‚Šåˆ¤å®šã®ç¯„å›²(è·é›¢)")]
     private float _radius = 9.0f;
 
-    [SerializeField, Tooltip("‹…‚Ì‘¬‚³(ƒ}ƒCƒiƒX‚É‚·‚é‚±‚Æ‚Å¶‚É”ò‚Ô)")]
-    private float _bulletSpeed = -5.0f;
+    [SerializeField, Tooltip("çƒã®é€Ÿã•(xã‚’ãƒã‚¤ãƒŠã‚¹ã«ã™ã‚‹ã“ã¨ã§å·¦ã«é£›ã¶)")]
+    private Vector3 _bulletSpeed = new Vector3(-5, 0, 0);
 
     private Vector2 _vDistance;
     private float _distance;
@@ -21,12 +21,12 @@ public class Enemy : Life
 
     void Start()
     {
-        // ƒQ[ƒ€ƒ}ƒl[ƒWƒƒ‚Ì“GƒŠƒXƒg‚É“o˜^
+        // ã‚²ãƒ¼ãƒ ãƒãƒãƒ¼ã‚¸ãƒ£ã®æ•µãƒªã‚¹ãƒˆã«ç™»éŒ²
         GameManager.Instance.Register(this);
 
-        // BulletGenerator‚ªStart‚É‚±‚Ìˆ—‚ğ‘‚¢‚Ä‚¢‚é‚½‚ß
-        // Œ‚‚Â‚Æ‚«‚ÉƒXƒe[ƒg‚ğ•ÏX‚·‚é•K—v‚ª‚ ‚é(‹t‚à‘R‚è)
-        // ƒƒ‚FBullet‚Ì•û‚ÅƒXƒe[ƒg‚É‡‚í‚¹‚ÄƒIƒuƒWƒFƒNƒg©‘Ì‚ğ•Ï‚¦‚½‚Ù‚¤‚ª‚¢‚¢‚©‚à
+        // BulletGeneratorãŒStartã«ã“ã®å‡¦ç†ã‚’æ›¸ã„ã¦ã„ã‚‹ãŸã‚
+        // æ’ƒã¤ã¨ãã«ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´ã™ã‚‹å¿…è¦ãŒã‚ã‚‹(é€†ã‚‚ç„¶ã‚Š)
+        // ãƒ¡ãƒ¢ï¼šBulletã®æ–¹ã§ã‚¹ãƒ†ãƒ¼ãƒˆã«åˆã‚ã›ã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆè‡ªä½“ã‚’å¤‰ãˆãŸã»ã†ãŒã„ã„ã‹ã‚‚
         /*var bullet = _bulletPrefab.GetComponent<Bullet>();
         bullet.Type = BulletType.Enemy;
         bullet.Speed = _bulletSpeed;*/
@@ -36,12 +36,12 @@ public class Enemy : Life
     {
         _vDistance = _player.transform.localPosition - this.transform.position;
         _distance = _vDistance.x * _vDistance.x + _vDistance.y * _vDistance.y;   
-        // Player‚Ì’†S‚ª‰~‚Ì’†‚É“ü‚Á‚Ä‚¢‚ê‚Î
+        // Playerã®ä¸­å¿ƒãŒå††ã®ä¸­ã«å…¥ã£ã¦ã„ã‚Œã°
         if (_distance <= _radius * _radius)
         {
             _timer += Time.deltaTime;
             ShootBullet();
-            //Debug.Log($"{this.name}”ÍˆÍ“à");
+            //Debug.Log($"{this.name}ç¯„å›²å†…");
         }
 
         if (Hp <= 0)
@@ -53,17 +53,17 @@ public class Enemy : Life
     }
 
     /// <summary>
-    /// ‹…‚ğŒ‚‚Âi¡‚Ì‚Æ‚±‚ë–³ŒÀ‚Éo‚é‚Ì‚Å’ˆÓj
+    /// çƒã‚’æ’ƒã¤ï¼ˆä»Šã®ã¨ã“ã‚ç„¡é™ã«å‡ºã‚‹ã®ã§æ³¨æ„ï¼‰
     /// </summary>
     private void ShootBullet()
     {
-        // ”­ËŠÔŠu‚ğ1•b‚ ‚¯‚é
+        // ç™ºå°„é–“éš”ã‚’1ç§’ã‚ã‘ã‚‹
         if (_timer > _interval)
         {
-            // æ’[‚©‚ço‚·‚½‚ß x - 0.5
+            // å…ˆç«¯ã‹ã‚‰å‡ºã™ãŸã‚ x - 0.5
             var obj = Instantiate(_bulletPrefab, this.transform.position + new Vector3(-0.5f, 0, 0), this.transform.rotation);
             
-            // ‹…‚ğ“Gd—l‚É•ÏX‚·‚é
+            // çƒã‚’æ•µä»•æ§˜ã«å¤‰æ›´ã™ã‚‹
             var bullet = obj.GetComponent<Bullet>();
             bullet.Type = BulletType.Enemy;
             bullet.Speed = _bulletSpeed;
