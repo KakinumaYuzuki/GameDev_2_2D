@@ -3,17 +3,15 @@ using UnityEngine;
 public class Enemy : Life
 {
     [SerializeField]
-    GameObject _player;
-
-    [SerializeField]
-    GameObject _bulletPrefab;
+    private GameObject _bulletPrefab;
 
     [SerializeField, Tooltip("当たり判定の範囲(距離)")]
     private float _radius = 9.0f;
 
     [SerializeField, Tooltip("球の速さ(xをマイナスにすることで左に飛ぶ)")]
     private Vector3 _bulletSpeed = new Vector3(-5, 0, 0);
-
+    
+    private GameObject _player;
     private Vector2 _vDistance;
     private float _distance;
     private float _timer = 0.0f;
@@ -24,6 +22,11 @@ public class Enemy : Life
         // ゲームマネージャの敵リストに登録
         GameManager.Instance.Register(this);
 
+        _player = GameObject.Find("Player");
+        
+        // スポナーの子オブジェクトになるのを回避
+        this.gameObject.transform.parent = null;
+        
         // BulletGeneratorがStartにこの処理を書いているため
         // 撃つときにステートを変更する必要がある(逆も然り)
         // メモ：Bulletの方でステートに合わせてオブジェクト自体を変えたほうがいいかも

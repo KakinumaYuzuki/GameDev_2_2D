@@ -101,4 +101,4 @@ MonoBehaviour:
   _player: {fileID: 0}
   _bulletPrefab: {fileID: 5812456035142060914, guid: 636301e695674194192dca806179e9e5, type: 3}
   _radius: 9
-  _bulletSpeed: -5
+  _bulletSpeed: {x: -5, y: 0, z: 0}

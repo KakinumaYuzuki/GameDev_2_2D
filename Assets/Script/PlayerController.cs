@@ -5,20 +5,20 @@ public class PlayerController : Life
     [SerializeField]
     private float _jumpPower = 3.0f;
 
-    [SerializeField, Tooltip("必ず正の値を入れる")]
+    [SerializeField, Tooltip("蠢�縺壽ｭ｣縺ｮ蛟､繧貞�･繧後ｋ")]
     private float _gravity = 30.0f;
 
     private float _speed = 5.0f;
     private float _jumpElapsedTime = 0.0f;
-    private float _offsetY;           // 初期の高さ
-    private bool _isGround = true;    // 接地判定用
+    private float _offsetY;           // 蛻晄悄縺ｮ鬮倥＆
+    private bool _isGround = true;    // 謗･蝨ｰ蛻､螳夂畑
     private Vector3 pos;
 
     //private int _JumpCount = 2;
 
     private void Start()
     {
-        // ゲームマネージャにプレイヤーを登録
+        // 繧ｲ繝ｼ繝繝槭ロ繝ｼ繧ｸ繝｣縺ｫ繝励Ξ繧､繝､繝ｼ繧堤匳骭ｲ
         GameManager.Instance.Register(this);
         pos = transform.position;
         _offsetY = pos.y;

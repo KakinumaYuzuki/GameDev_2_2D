@@ -1,8 +1,8 @@
 using UnityEngine;
 
 /// <summary>
-/// ƒ‰ƒCƒt‚ÌŠÇ—
-/// ƒ‰ƒCƒt‚ğ‚ÂƒNƒ‰ƒX‚ÅŒp³‚·‚é
+/// ãƒ©ã‚¤ãƒ•ã®ç®¡ç†
+/// ãƒ©ã‚¤ãƒ•ã‚’æŒã¤ã‚¯ãƒ©ã‚¹ã§ç¶™æ‰¿ã™ã‚‹
 /// </summary>
 public class Life : MonoBehaviour
 {
@@ -17,7 +17,7 @@ public class Life : MonoBehaviour
         if (_hp <= 0)
         {
             _hp = 0;
-            Debug.Log($"{this.gameObject}ƒ‰ƒCƒt0");
+            Debug.Log($"{this.gameObject}ãƒ©ã‚¤ãƒ•0");
         }
     }
 }
