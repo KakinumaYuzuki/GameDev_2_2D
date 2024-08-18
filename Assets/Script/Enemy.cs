@@ -56,7 +56,7 @@ public class Enemy : Life
     }
 
     /// <summary>
-    /// 球を撃つ（今のところ無限に出るので注意）
+    /// 弾を撃つ（今のところ無限に出るので注意）
     /// </summary>
     private void ShootBullet()
     {
@@ -66,10 +66,16 @@ public class Enemy : Life
             // 先端から出すため x - 0.5
             var obj = Instantiate(_bulletPrefab, this.transform.position + new Vector3(-0.5f, 0, 0), this.transform.rotation);
             
-            // 球を敵仕様に変更する
+            // 弾を敵仕様に変更する
             var bullet = obj.GetComponent<Bullet>();
             bullet.Type = BulletType.Enemy;
-            bullet.Speed = _bulletSpeed;
+            // xがマイナスの場合、左に弾を飛ばす
+            bullet.SetDirection(_bulletSpeed);
+            
+            // メモ：プレイヤーの方向に弾を飛ばす場合
+            //Vector3 pos = new Vector3(_player.transform.position.x - this.transform.position.x, 
+            //                            _player.transform.position.y - this.transform.position.y, 0);
+            //bullet.SetDirection(pos);
 
             _timer = 0.0f;
         }

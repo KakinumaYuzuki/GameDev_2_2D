@@ -29,6 +29,7 @@ public class Bullet : MonoBehaviour
         {
             _type = value;
             OnColorChanged();
+            OnTargetChanged();
         }
     }
 
@@ -47,7 +48,15 @@ public class Bullet : MonoBehaviour
         _pos += _speed * Time.deltaTime;
         transform.position = _pos;
 
-        // ‹…‚Ìí—Ş‚É‚æ‚Á‚Ä“–‚½‚é‘ÎÛ‚ğ•Ï‚¦‚é
+        // å¼¾ã®ç¨®é¡ã«ã‚ˆã£ã¦å½“ãŸã‚‹å¯¾è±¡ã‚’å¤‰ãˆã‚‹
+        OnTargetChanged();
+    }
+
+    /// <summary>
+    /// å‡ºç¾æ™‚ã®ã‚¹ãƒ†ãƒ¼ãƒˆã«ã‚ˆã£ã¦å½“ãŸã‚‹å¯¾è±¡ã‚’å¤‰ãˆã‚‹
+    /// </summary>
+    private void OnTargetChanged()
+    {
         switch (_type)
         {
             case BulletType.Player:
@@ -73,7 +82,7 @@ public class Bullet : MonoBehaviour
     }
 
     /// <summary>
-    /// oŒ»‚ÌƒXƒe[ƒg‚É‚æ‚Á‚ÄF‚ğ•Ï‚¦‚é
+    /// å‡ºç¾æ™‚ã®ã‚¹ãƒ†ãƒ¼ãƒˆã«ã‚ˆã£ã¦è‰²ã‚’å¤‰ãˆã‚‹
     /// </summary>
     private void OnColorChanged()
     {
@@ -90,10 +99,10 @@ public class Bullet : MonoBehaviour
     }
 
     /// <summary>
-    /// “–‚½‚è”»’è‚ğ‚Æ‚é ‹éŒ`“¯m‚Ì”»’è
+    /// å½“ãŸã‚Šåˆ¤å®šã‚’ã¨ã‚‹ çŸ©å½¢åŒå£«ã®åˆ¤å®š
     /// </summary>
-    /// <param name="target">Transform ‹…‚É“–‚½‚é”»’è‚Ì‘ÎÛ</param>
-    /// <returns>‹…‚É“–‚½‚Á‚Ä‚¢‚ê‚ÎtrueA‚»‚¤‚Å‚È‚¯‚ê‚Îfalse</returns>
+    /// <param name="target">Transform çƒã«å½“ãŸã‚‹åˆ¤å®šã®å¯¾è±¡</param>
+    /// <returns>çƒã«å½“ãŸã£ã¦ã„ã‚Œã°trueã€ãã†ã§ãªã‘ã‚Œã°false</returns>
     private bool IsHit(Transform target)
     {
         var targetLeftUpperPos = target.transform.position - target.transform.localScale / 2;
@@ -110,11 +119,11 @@ public class Bullet : MonoBehaviour
     }
 
     /// <summary>
-    /// ’e‚Ì”ò‚Ô•ûŒü‚ğŒˆ‚ß‚é
+    /// å¼¾ã®é£›ã¶æ–¹å‘ã‚’æ±ºã‚ã‚‹
     /// </summary>
     /// <param name="vec"></param>
     public void SetDirection(Vector3 vec)
     {
-        _speed = vec * _speed.magnitude;
+        _speed = vec.normalized * _speed.magnitude;
     }
 }

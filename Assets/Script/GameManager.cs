@@ -13,7 +13,7 @@ public class GameManager
     public PlayerController Player => _player;
     public List<Enemy> Enemies => _enemies;
 
-    // Œ^‚²‚Æ‚É“o˜^‚·‚é
+    // å‹ã”ã¨ã«ç™»éŒ²ã™ã‚‹
     public void Register(PlayerController player) { _player = player; }
     public void Register(Enemy enemy) {  _enemies.Add(enemy); }
     public void Unregister(Enemy enemy) { _enemies.Remove(enemy); }
