@@ -25,6 +25,9 @@ public class BulletEnemy : MonoBehaviour
     
     void Update()
     {
+        // ノックバック
+        _enemy.Knockback();
+        
         if (_enemy.Trigger)
         {
             this.transform.position += _speed * Time.deltaTime * _vec;
@@ -32,8 +35,9 @@ public class BulletEnemy : MonoBehaviour
             {
                 if (_canDealDamage)
                 {
-                    Debug.Log($"プレーヤーにダメージ：{_damageValue}");
                     _player.Damage(_damageValue);
+                    // ノックバックの方向と威力を設定
+                    _player.SetKnockbackParam(this.transform.position, _damageValue);
                     _canDealDamage = false;  // 一度しか当たらない想定
                 }
             }

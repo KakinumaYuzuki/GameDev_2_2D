@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Enemy : Life
+public class Enemy : Character
 {
     [SerializeField, Tooltip("当たり判定の範囲(距離)")]
     private float _radius = 9.0f;
@@ -25,6 +25,9 @@ public class Enemy : Life
 
     private void Update()
     {
+        // ノックバック
+        Knockback();
+        
         _vDistance = _player.transform.localPosition - this.transform.position;
         _distance = _vDistance.x * _vDistance.x + _vDistance.y * _vDistance.y;   
         // Playerの中心が円の中に入っていれば

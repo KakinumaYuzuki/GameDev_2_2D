@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerController : Life
+public class PlayerController : Character
 {
     [SerializeField]
     private float _jumpPower = 3.0f;
@@ -13,6 +13,7 @@ public class PlayerController : Life
     private float _offsetY;           // 初期の高さ
     private bool _isGround = true;    // 接地判定用
     private Vector3 pos;
+    private bool _canMove = true;
 
     //private int _JumpCount = 2;
 
@@ -26,8 +27,17 @@ public class PlayerController : Life
 
     private void Update()
     {
-        PlayerMove();
-        PlayerJump();
+        // ノックバック
+        Knockback();
+        // ノックバック中であれば動けなく、そうでなければ動ける
+        _canMove = !IsKnockback;
+        // ノックバック中は移動しない
+        if (_canMove)
+        {
+            PlayerMove();
+            PlayerJump();            
+        }
+
 
         if (Hp <= 0)
         {
@@ -59,5 +69,15 @@ public class PlayerController : Life
             }
             transform.position = new Vector3(this.transform.position.x, pos.y, this.transform.position.z);
         }
+    }
+
+    public override void Damage(int value)
+    {
+        // ノックバック中は攻撃を攻撃を食らわない(無敵)
+        if (IsKnockback)
+        {
+            return;
+        }
+        base.Damage(value);
     }
 }

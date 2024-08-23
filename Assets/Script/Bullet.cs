@@ -68,6 +68,8 @@ public class Bullet : MonoBehaviour
                     if (IsHit(enemy.transform))
                     {
                         enemy.Damage(_damageValue);
+                        // ノックバックの方向と威力を設定
+                        enemy.SetKnockbackParam(this.transform.position, _damageValue);
                         DestroyBullet();
                     }
                 }
@@ -77,6 +79,8 @@ public class Bullet : MonoBehaviour
                 if (IsHit(player.transform))
                 {
                     player.Damage(_damageValue);
+                    // ノックバックの方向と威力を設定
+                    player.SetKnockbackParam(this.transform.position, _damageValue);
                     DestroyBullet();
                 }
                 break;
