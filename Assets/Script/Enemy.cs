@@ -2,37 +2,25 @@ using UnityEngine;
 
 public class Enemy : Life
 {
-    [SerializeField]
-    private GameObject _bulletPrefab;
-
     [SerializeField, Tooltip("当たり判定の範囲(距離)")]
     private float _radius = 9.0f;
-
-    [SerializeField, Tooltip("球の速さ(xをマイナスにすることで左に飛ぶ)")]
-    private Vector3 _bulletSpeed = new Vector3(-5, 0, 0);
     
-    private GameObject _player;
+    private PlayerController _player;
     private Vector2 _vDistance;
     private float _distance;
-    private float _timer = 0.0f;
-    private float _interval = 1.0f;
+    private bool _trigger = false;  // プレイヤーが判定内にいるかどうか
+    
+    public bool Trigger => _trigger;
 
     void Start()
     {
         // ゲームマネージャの敵リストに登録
         GameManager.Instance.Register(this);
-
-        _player = GameObject.Find("Player");
+        
+        _player = GameObject.FindObjectOfType<PlayerController>();
         
         // スポナーの子オブジェクトになるのを回避
         this.gameObject.transform.parent = null;
-        
-        // BulletGeneratorがStartにこの処理を書いているため
-        // 撃つときにステートを変更する必要がある(逆も然り)
-        // メモ：Bulletの方でステートに合わせてオブジェクト自体を変えたほうがいいかも
-        /*var bullet = _bulletPrefab.GetComponent<Bullet>();
-        bullet.Type = BulletType.Enemy;
-        bullet.Speed = _bulletSpeed;*/
     }
 
     private void Update()
@@ -42,11 +30,13 @@ public class Enemy : Life
         // Playerの中心が円の中に入っていれば
         if (_distance <= _radius * _radius)
         {
-            _timer += Time.deltaTime;
-            ShootBullet();
-            //Debug.Log($"{this.name}範囲内");
+            _trigger = true;
+            Debug.Log($"{this.name}範囲内");
         }
-
+        else
+        {
+            _trigger = false;
+        }
         if (Hp <= 0)
         {
             GameManager.Instance.Unregister(this);
@@ -54,30 +44,13 @@ public class Enemy : Life
             return;
         }
     }
-
+    
     /// <summary>
-    /// 弾を撃つ（今のところ無限に出るので注意）
+    /// 画面外に行ったら自身を破棄する
     /// </summary>
-    private void ShootBullet()
+    private void OnBecameInvisible()
     {
-        // 発射間隔を1秒あける
-        if (_timer > _interval)
-        {
-            // 先端から出すため x - 0.5
-            var obj = Instantiate(_bulletPrefab, this.transform.position + new Vector3(-0.5f, 0, 0), this.transform.rotation);
-            
-            // 弾を敵仕様に変更する
-            var bullet = obj.GetComponent<Bullet>();
-            bullet.Type = BulletType.Enemy;
-            // xがマイナスの場合、左に弾を飛ばす
-            bullet.SetDirection(_bulletSpeed);
-            
-            // メモ：プレイヤーの方向に弾を飛ばす場合
-            //Vector3 pos = new Vector3(_player.transform.position.x - this.transform.position.x, 
-            //                            _player.transform.position.y - this.transform.position.y, 0);
-            //bullet.SetDirection(pos);
-
-            _timer = 0.0f;
-        }
+        GameManager.Instance.Unregister(this);
+        Destroy(this.gameObject);
     }
 }

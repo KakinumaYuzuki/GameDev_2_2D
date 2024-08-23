@@ -19,28 +19,24 @@ public class Bullet : MonoBehaviour
 
     private Vector3 _pos;
     private Vector3 _speed = new Vector3(5, 0, 0);
+    private int _damageValue = 1;
+    private bool _deathFlag = false;
 
     public Vector3 Speed { get => _speed; set => _speed = value; }
 
-    public BulletType Type
-    {
-        get => _type;
-        set
-        {
-            _type = value;
-            OnColorChanged();
-            OnTargetChanged();
-        }
-    }
+    public bool DeathFlag { get => _deathFlag; set => _deathFlag = value; }
 
     private void OnValidate()
     {
-        OnColorChanged();
+        ColorChange();
     }
 
     private void Start()
     {
+        ColorChange();
         _pos = transform.position;
+        // 敵の弾のみにを登録する場合は条件式を書く
+        GameManager.Instance.Register(this);
     }
 
     private void Update()
@@ -48,14 +44,20 @@ public class Bullet : MonoBehaviour
         _pos += _speed * Time.deltaTime;
         transform.position = _pos;
 
-        // 弾の種類によって当たる対象を変える
-        OnTargetChanged();
+        // 弾の種類によって当たる対象を変え、ダメージを与える
+        DealDamage();
+        if (_deathFlag)
+        {
+            DestroyBullet();
+        }
     }
 
     /// <summary>
-    /// 出現時のステートによって当たる対象を変える
+    /// 判定を行い、ダメージを与える
+    /// (出現時のステートによって当たる対象を変える)
+    /// 当たっていた場合は自分自身も破棄する
     /// </summary>
-    private void OnTargetChanged()
+    private void DealDamage()
     {
         switch (_type)
         {
@@ -65,8 +67,8 @@ public class Bullet : MonoBehaviour
                 {
                     if (IsHit(enemy.transform))
                     {
-                        enemy.Damage();
-                        Destroy(this.gameObject);
+                        enemy.Damage(_damageValue);
+                        DestroyBullet();
                     }
                 }
                 break;
@@ -74,8 +76,8 @@ public class Bullet : MonoBehaviour
                 var player = GameManager.Instance.Player;
                 if (IsHit(player.transform))
                 {
-                    player.Damage();
-                    Destroy(this.gameObject);
+                    player.Damage(_damageValue);
+                    DestroyBullet();
                 }
                 break;
         }
@@ -84,7 +86,7 @@ public class Bullet : MonoBehaviour
     /// <summary>
     /// 出現時のステートによって色を変える
     /// </summary>
-    private void OnColorChanged()
+    private void ColorChange()
     {
         var renderer = GetComponent<SpriteRenderer>();
         switch (_type)
@@ -101,17 +103,17 @@ public class Bullet : MonoBehaviour
     /// <summary>
     /// 当たり判定をとる 矩形同士の判定
     /// </summary>
-    /// <param name="target">Transform 球に当たる判定の対象</param>
-    /// <returns>球に当たっていればtrue、そうでなければfalse</returns>
+    /// <param name="target">Transform 弾に当たる判定の対象</param>
+    /// <returns>弾に当たっていればtrue、そうでなければfalse</returns>
     private bool IsHit(Transform target)
     {
-        var targetLeftUpperPos = target.transform.position - target.transform.localScale / 2;
-        var playerRightBottomPos = target.transform.position + target.transform.localScale / 2;
-        var bulletLeftUpperPos = this.transform.position - this.transform.localScale / 2;
-        var bulletBottomPos = this.transform.position + this.transform.localScale / 2;
+        var targetLeftBottomPos = target.transform.position - target.transform.localScale / 2;  // 左
+        var targetRightUpperPos = target.transform.position + target.transform.localScale / 2;  // 右
+        var bulletLeftBottomPos = this.transform.position - this.transform.localScale / 2;      // 左
+        var bulletRightUpperPos = this.transform.position + this.transform.localScale / 2;      // 右
 
-        if (targetLeftUpperPos.x <= bulletBottomPos.x && bulletLeftUpperPos.x <= playerRightBottomPos.x
-                && targetLeftUpperPos.y <= bulletBottomPos.y && bulletLeftUpperPos.y <= playerRightBottomPos.y)
+        if (targetLeftBottomPos.x <= bulletRightUpperPos.x && bulletLeftBottomPos.x <= targetRightUpperPos.x
+                && targetLeftBottomPos.y <= bulletRightUpperPos.y && bulletLeftBottomPos.y <= targetRightUpperPos.y)
         {
             return true;
         }
@@ -125,5 +127,23 @@ public class Bullet : MonoBehaviour
     public void SetDirection(Vector3 vec)
     {
         _speed = vec.normalized * _speed.magnitude;
+    }
+
+    /// <summary>
+    /// 弾を消す　(他のオブジェクトとまとめたほうがいいかも)
+    /// </summary>
+    public void DestroyBullet()
+    {
+        GameManager.Instance.Unregister(this);
+        Destroy(this.gameObject);
+    }
+
+    /// <summary>
+    /// 弾の種類を設定する
+    /// </summary>
+    /// <param name="type"></param>
+    public void SetBulletType(BulletType type)
+    {
+        _type = type;
     }
 }

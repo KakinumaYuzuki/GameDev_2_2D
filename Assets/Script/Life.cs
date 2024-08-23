@@ -11,9 +11,9 @@ public class Life : MonoBehaviour
 
     public int Hp => _hp;
 
-    public void Damage()
+    public void Damage(int value)
     {
-        _hp--;
+        _hp -= value;
         if (_hp <= 0)
         {
             _hp = 0;

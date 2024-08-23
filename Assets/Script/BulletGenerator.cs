@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// Playerの弾を生成する
@@ -8,6 +9,9 @@ public class BulletGenerator : MonoBehaviour
     [SerializeField]
     private GameObject _bulletPrefab;
 
+    [FormerlySerializedAs("_lazerBulletPrefab")] [SerializeField]
+    private GameObject _laserBulletPrefab;
+
     [SerializeField]
     private GameObject _player;
     
@@ -15,24 +19,51 @@ public class BulletGenerator : MonoBehaviour
     private GameObject _target;
     private float _radian = 0.0f;
 
+    private float _timer;
+
     private void Start()
     {
         var bullet = _bulletPrefab.GetComponent<Bullet>();
-        bullet.Type = BulletType.Player;
+        bullet.SetBulletType(BulletType.Player);
     }
     void Update()
     {
         // プレイヤーの向きをポインターに合わせて変更する
         SetRadian(GetRadian());
         
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKey(KeyCode.Z))
+        {
+            _timer += Time.deltaTime;            
+        }
+        if (Input.GetKeyUp(KeyCode.Z))
+        {
+            // レーザー
+            if (_timer > 1f)
+            {
+                _timer = 0;
+                Instantiate(_laserBulletPrefab, this.transform.position, _player.transform.rotation);
+                Debug.Log("レーザー発射");
+            }
+            // 単発
+            else
+            {
+                var bulletObj = Instantiate(_bulletPrefab, this.transform.position, _player.transform.rotation);
+                var bullet = bulletObj.GetComponent<Bullet>();
+                // 弾の飛ぶ方向(力の向き)をプレイヤーの向きに合わせる
+                bullet.SetDirection(_player.transform.right);
+                Debug.Log("単発発射");
+            }
+            _timer = 0;
+        }
+        
+        /*if (Input.GetKeyDown(KeyCode.Z))
         {
             // 射出角度はプレイヤーの向きに合わせる
-            var bulletObj = Instantiate(_bulletPrefab, transform.position, _player.transform.rotation);
+            var bulletObj = Instantiate(_bulletPrefab, this.transform.position, _player.transform.rotation);
             var bullet = bulletObj.GetComponent<Bullet>();
             // 弾の飛ぶ方向(力の向き)をプレイヤーの向きに合わせる
             bullet.SetDirection(_player.transform.right);
-        }
+        }*/
     }
 
     /// <summary>
