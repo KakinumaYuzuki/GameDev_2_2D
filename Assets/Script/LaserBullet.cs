@@ -113,6 +113,8 @@ public class LaserBullet : MonoBehaviour
             if (IsHit(enemy.transform))
             {
                 enemy.Damage(_damageValue);
+                // 敵に当たった時全体を停止させる(レーザー　0.25s)
+                GameManager.Instance.HitStop(0.25f);
             }
         }
     }

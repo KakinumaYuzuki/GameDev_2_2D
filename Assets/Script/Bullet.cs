@@ -20,11 +20,8 @@ public class Bullet : MonoBehaviour
     private Vector3 _pos;
     private Vector3 _speed = new Vector3(5, 0, 0);
     private int _damageValue = 1;
-    private bool _deathFlag = false;
 
     public Vector3 Speed { get => _speed; set => _speed = value; }
-
-    public bool DeathFlag { get => _deathFlag; set => _deathFlag = value; }
 
     private void OnValidate()
     {
@@ -46,10 +43,6 @@ public class Bullet : MonoBehaviour
 
         // 弾の種類によって当たる対象を変え、ダメージを与える
         DealDamage();
-        if (_deathFlag)
-        {
-            DestroyBullet();
-        }
     }
 
     /// <summary>
@@ -70,6 +63,8 @@ public class Bullet : MonoBehaviour
                         enemy.Damage(_damageValue);
                         // ノックバックの方向と威力を設定
                         enemy.SetKnockbackParam(this.transform.position, _damageValue);
+                        // 敵に当たった時全体を停止させる(通常弾　0.08s)
+                        GameManager.Instance.HitStop(0.08f);
                         DestroyBullet();
                     }
                 }

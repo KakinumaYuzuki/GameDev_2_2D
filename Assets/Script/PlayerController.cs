@@ -37,7 +37,8 @@ public class PlayerController : Character
             PlayerMove();
             PlayerJump();            
         }
-
+        // タイムスケールを元に戻す
+        GameManager.Instance.SwitchTimeScale();
 
         if (Hp <= 0)
         {
